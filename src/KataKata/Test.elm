@@ -106,5 +106,5 @@ viewBatch : String -> List TestResult -> Element msg
 viewBatch label results =
     column [ spacing 32 ]
         [ text label
-        , column [ paddingXY 32 0, spacing 24 ] <| List.map viewTestResult results
+        , column [ paddingXY 32 0, spacing 32 ] <| List.map viewTestResult results
         ]
