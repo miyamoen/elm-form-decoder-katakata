@@ -23,6 +23,17 @@ textとnumberをまとめてレコード型で扱うことにしました。フ�
   - 画面下部に表示されるテスト結果を読んで`replace____me*`を書き換えましょう
   - 🎉🎉テストが全部通ったらクリアです！🎉🎉
 
+
+## 追加課題
+
+文字列の長さはnumber以下にすることにしました。つまり、numberは1以上10以下の整数でtextはnumber文字以下の空文字ではない文字列です。
+
+
+### やり方
+
+  - 一番下の"form.textがnumber文字より長いとき、変換は失敗します"のテストについている`skip <|`を外して有効化しましょう
+  - 🎉🎉テストが全部通ったらクリアです！🎉🎉
+
 -}
 
 import Browser
@@ -149,11 +160,11 @@ testSuite =
             \_ ->
                 init
                     |> update (ChangeText "我が臆病な自尊心と、尊大な羞恥心との所為である")
-                    |> update (ChangeNumber "5")
+                    |> update (ChangeNumber "10")
                     |> update ConvertForm
                     |> .value
                     |> Expect.err
-                    |> Expect.onFail "form.textが10文字以上のときは変換が失敗するようにしましょう"
+                    |> Expect.onFail "form.textが10文字より長いときは変換が失敗するようにしましょう"
         , Test.test "form.textが空文字のとき、変換は失敗します" <|
             \_ ->
                 init
@@ -201,4 +212,14 @@ testSuite =
 
                     _ ->
                         Expect.fail "form.numberが1以上10以下の整数に変換できなければ失敗するようにしましょう"
+        , Test.skip <|
+            Test.test "form.textがnumber文字より長いとき、変換は失敗します" <|
+                \_ ->
+                    init
+                        |> update (ChangeText "虎になる")
+                        |> update (ChangeNumber "3")
+                        |> update ConvertForm
+                        |> .value
+                        |> Expect.err
+                        |> Expect.onFail "form.textがnumber文字より長いときは変換が失敗するようにしましょう"
         ]

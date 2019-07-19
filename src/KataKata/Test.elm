@@ -1,4 +1,4 @@
-module KataKata.Test exposing (Test(..), describe, test, view, withTest)
+module KataKata.Test exposing (Test(..), describe, skip, test, view, withTest)
 
 import Element exposing (..)
 import Element.Border as Border
@@ -14,6 +14,7 @@ import Test.Runner.Failure exposing (Reason)
 type Test
     = Single String (() -> Expectation)
     | Batch String (List Test)
+    | Skip Test
 
 
 test : String -> (() -> Expectation) -> Test
@@ -24,6 +25,11 @@ test =
 describe : String -> List Test -> Test
 describe =
     Batch
+
+
+skip : Test -> Test
+skip =
+    Skip
 
 
 withTest : Test -> Element msg -> Html msg
@@ -49,6 +55,7 @@ convertFailure { description, reason } =
 type TestResult
     = SingleResult String (Maybe Failure)
     | BatchResult String (List TestResult)
+    | Skiped
 
 
 run : Test -> TestResult
@@ -61,6 +68,9 @@ run suite =
 
         Batch label suites ->
             BatchResult label <| List.map run suites
+
+        Skip _ ->
+            Skiped
 
 
 view : Test -> Element msg
@@ -84,6 +94,9 @@ viewTestResult result =
 
         BatchResult label results ->
             viewBatch label results
+
+        Skiped ->
+            none
 
 
 viewSingle : String -> Maybe Failure -> Element msg
