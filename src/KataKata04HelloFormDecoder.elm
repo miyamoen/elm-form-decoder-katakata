@@ -22,6 +22,48 @@ arowM/elm-form-decoderを使ってみましょう
   - 画面下部に表示されるテスト結果を読んで`replace____me*`を書き換えましょう
   - 🎉🎉テストが全部通ったらクリアです！🎉🎉
 
+
+## 学ぶ
+
+
+### 記事で学ぶ
+
+紹介記事は軽く目を通してください
+
+  - [package document](https://package.elm-lang.org/packages/arowM/elm-form-decoder/latest/)
+  - 作者の書いた紹介記事[「フォームバリデーションからフォームデコーディングの時代へ」](https://qiita.com/arowM/items/6c32db1f9e4b92445f3b)
+  - API詳解[「arowM/elm-form-decoderのAPIを【かんぜんりかい】しよう！」](https://qiita.com/miyamo_madoka/items/d02f003ec1c212360111)
+
+
+### 今回学ぶこと
+
+  - Decoderの実行方法
+      - `Decoder.run decoder input`で定義したdecoderで変換できる
+      - `run`の結果は`Result (List err) a`なのでパターンマッチで欲しい値を手に入れる
+  - 簡単なDecoderとValidator
+      - Stringを受け取ってStringを返すDecoderは`identity`で作れる
+      - Validatorは`assert`で適用する
+      - 長さに関するValidatorは`minLength`と`maxLength`
+
+
+#### `Decoder i err a`
+
+`i`から`a`への変換。変換に失敗すると`List err`になる。
+
+実体は`i -> Result (List err) a`です。
+
+
+#### `Validator i err`
+
+変換をせずにバリデーションのみをする型です。
+
+    decoder
+        |> assert validator
+
+assertを使ってDecoderに適用します。Decoderで変換したあと、その値をバリデーションします。成功したらそのまま通し失敗したらDecoder全体が失敗になります。
+
+`minLength`, `maxLength`, `minBound`, `maxBound`がヘルパーとして用意されています。
+
 -}
 
 import Browser
@@ -60,12 +102,7 @@ update msg model =
             { model | formText = string }
 
         ConvertText ->
-            case Decoder.run decoder model.formText of
-                Ok text ->
-                    { model | text = text }
-
-                Err _ ->
-                    model
+            replace____me1 model
 
 
 type Error
@@ -75,7 +112,7 @@ type Error
 
 decoder : Decoder String Error String
 decoder =
-    replace____me <| Decoder.fail TextEmpty
+    replace____me2 <| Decoder.always "虎にならない"
 
 
 view : Model -> Html Msg
@@ -152,7 +189,10 @@ testSuite =
                     |> update ConvertText
                     |> .text
                     |> Expect.equal text
-                    |> Expect.onFail "textがformTextから変換されるように`replace____me`を書き換えましょう"
+                    |> Expect.onFail """textがformTextから変換されるように`replace____me*`を書き換えましょう
+
+replace____me1はDecoder.runとdecoderを使ってformTextを変換しましょう
+replace____me2はDecoder.identityで`Decoder String err Strig`を作りましょう"""
         , Test.test "formTextが空文字のとき、変換は失敗します" <|
             \_ ->
                 let
@@ -187,11 +227,11 @@ testSuite =
                         Decoder.errors decoder updated.formText
                 in
                 if text == updated.text then
-                    Expect.fail "formTextが10文字以上のときは失敗するようにしましょう"
+                    Expect.fail "formTextが10文字以上のときは失敗するようにdecoderでバリデーションしましょう"
 
                 else if List.member TextOver10Length errors then
                     Expect.pass
 
                 else
-                    Expect.fail "formTextが10文字以上のときはTextOver10Lengthのエラーで失敗するようにしましょう"
+                    Expect.fail "formTextが10文字以上のときはTextOver10Lengthのエラーで失敗するようにdecoderにバリデーションを足しましょう"
         ]
