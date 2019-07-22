@@ -107,7 +107,7 @@ update msg model =
 
 type Error
     = TextEmpty
-    | TextOver10Length
+    | TextTooLong
 
 
 decoder : Decoder String Error String
@@ -139,7 +139,7 @@ view model =
 
                       else
                         none
-                    , if List.member TextOver10Length errors then
+                    , if List.member TextTooLong errors then
                         text "10文字以下にしてください"
 
                       else
@@ -229,9 +229,9 @@ replace____me2はDecoder.identityで`Decoder String err Strig`を作りましょ
                 if text == updated.text then
                     Expect.fail "formTextが10文字以上のときは失敗するようにdecoderでバリデーションしましょう"
 
-                else if List.member TextOver10Length errors then
+                else if List.member TextTooLong errors then
                     Expect.pass
 
                 else
-                    Expect.fail "formTextが10文字以上のときはTextOver10Lengthのエラーで失敗するようにdecoderにバリデーションを足しましょう"
+                    Expect.fail "formTextが10文字以上のときはTextTooLongのエラーで失敗するようにdecoderにバリデーションを足しましょう"
         ]
