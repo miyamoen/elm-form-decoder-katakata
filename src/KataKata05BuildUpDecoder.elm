@@ -12,6 +12,11 @@ Decoderを組み合わせて使ってみましょう
 
 Decoderを作ってみて自信を付けたあなたは、次にkatakata 03のtextとnumberのレコードのフォームをelm-form-decoderで作ってみることにしました。
 
+制約は以下です
+
+  - 文字列は空文字でなく長さ10文字以下
+  - 数字は1以上10以下の整数
+
 
 ## やり方
 
@@ -97,13 +102,67 @@ TigerFormからnameは`.name`で簡単に取れるのでこの変換は簡単に
 題材はそのまま虎を使う。
 
     nameDecoder : Decoder String Error String
+
     speciesDecoder : Decoder String Error Species
 
-    Decoder.top Tiger
-        |> Decoder.field (Decoder.lift .name nameDecoder)
-        |> Decoder.field (Decoder.lift .species speciesDecoder)
+    decoder : Decoder TigerForm Error Tiger
+    decoder =
+        Decoder.top Tiger
+            |> Decoder.field (Decoder.lift .name nameDecoder)
+            |> Decoder.field (Decoder.lift .species speciesDecoder)
 
 `top`と`field`を使う。このAPIは[NoRedInk/elm-json-decode-pipeline](https://package.elm-lang.org/packages/NoRedInk/elm-json-decode-pipeline/latest/)と一緒で最初にコンストラクターを置いてパイプで引数を与えていく形になっている。
+
+合成するときは各Decoderの入力の型を合わせなければならない。そのために前項で学んだ`lift`を使う。`top Constructor |> field (lift .accessor subDecoder)`をとりあえず覚えてしまってもいい。
+
+
+## 追加課題
+
+文字列の長さはnumber以下にすることにしました。つまり、numberは1以上10以下の整数でtextはnumber文字以下の空文字ではない文字列です。
+
+
+### やり方
+
+  - 一番下の"form.textがnumber文字より長いとき、変換は失敗します"のテストについている`skip <|`を外して有効化しましょう
+  - 🎉🎉テストが全部通ったらクリアです！🎉🎉
+
+
+### 学ぶ
+
+実装方法はいくつかあると思うが、ここでは組み合わせた後にバリデーションすることにする。（もちろん自分で考えたやり方でやってもらっていい）
+
+
+#### 考え方
+
+回答作ったときの考え方を書いておきますがあんまり役に立たなさそうです。
+
+numberに依存してDecoderを作らないといけないので、値に依存したDecoderを作る関数は`with`と`andThen`で作れる。これで作ってみようとするとdecoderの実装がこんがらがってちょっと勉強用には適さないかもしれない。バリデーションをつけ足せば既存のは壊さないで書けそう。
+
+ということでdecoderにtextがnumber文字以下のバリデーションを足してみましょう。
+
+
+#### カスタムバリデーターを作る
+
+packageに用意されているValidator（minBound, minLength,...）はあくまでよく使うだろうから用意されているだけであって、自分で作ってはいけないだなんて固定観念を今すぐ捨て去るべきです。作りましょう。
+
+    type alias Validator input err =
+        Decoder input err ()
+
+Validatorを作る専用APIはありませんが、Validatorの定義をみれば作り方はわかると思います。`i -> Result (List err) ()`を作ればいいわけです。`custom`を使えば作ることができます。
+
+    custom : (input -> Result (List err) a) -> Decoder input err a
+
+    tigerValidator : Validator Tiger Err
+    tigerValidator =
+        custom <|
+            \tiger ->
+                if hoge tiger then
+                    Ok ()
+
+                else
+                    Err [ TigerTooBig ]
+
+このようにデコードしたあとの虎を使っていくらでもバリデーションできます。
 
 -}
 
