@@ -102,6 +102,7 @@ update msg model =
             { model | formText = string }
 
         ConvertText ->
+            -- `replace____me1 model.value`全体を書き換えてください
             replace____me1 model
 
 
@@ -112,6 +113,7 @@ type Error
 
 decoder : Decoder String Error String
 decoder =
+    -- `replace____me2 <| Decoder.always "虎にならない"`全体を書き換えてください
     replace____me2 <| Decoder.always "虎にならない"
 
 
