@@ -37,6 +37,7 @@ textとnumberをまとめてレコード型で扱うことにしました。フ�
 -}
 
 import Browser
+import Component.Grid as Grid
 import Element exposing (..)
 import Element.Background as Background
 import Element.Border as Border
@@ -86,7 +87,7 @@ update msg ({ form } as model) =
         ConvertForm ->
             { model
               -- `replace____me model.value`全体を書き換えてください
-                | value = replace____me model.value
+                | value = Err "エラーだよ"
             }
 
 
@@ -94,21 +95,40 @@ view : Model -> Html Msg
 view model =
     Test.withTest testSuite <|
         column [ width fill, spacing 16 ]
-            [ Element.Input.text
-                [ width fill
-                , htmlAttribute <| Html.Attributes.autofocus True
+            [ Grid.view [ spacingXY 16 8 ]
+                [ shrink, fill, shrink, fill ]
+                [ [ el [ centerY ] <| text "text"
+                  , Element.Input.text
+                        [ htmlAttribute <| Html.Attributes.autofocus True ]
+                        { onChange = ChangeText
+                        , text = model.form.text
+                        , placeholder = Nothing
+                        , label = Element.Input.labelHidden "text"
+                        }
+                  , el [ centerY ] <| text "➡"
+                  , case model.value of
+                        Ok value ->
+                            wrappedText [ centerY ] value.text
+
+                        Err error ->
+                            el [ centerY ] <| text "textの変換に失敗しました"
+                  ]
+                , [ el [ centerY ] <| text "number"
+                  , Element.Input.text []
+                        { onChange = ChangeNumber
+                        , text = model.form.number
+                        , placeholder = Nothing
+                        , label = Element.Input.labelHidden "number"
+                        }
+                  , el [ centerY ] <| text "➡"
+                  , case model.value of
+                        Ok value ->
+                            wrappedText [ centerY ] <| String.fromInt value.number
+
+                        Err error ->
+                            el [ centerY ] <| text "numberの変換に失敗しました"
+                  ]
                 ]
-                { onChange = ChangeText
-                , text = model.form.text
-                , placeholder = Nothing
-                , label = Element.Input.labelAbove [] <| text "text"
-                }
-            , Element.Input.text [ width fill ]
-                { onChange = ChangeNumber
-                , text = model.form.number
-                , placeholder = Nothing
-                , label = Element.Input.labelAbove [] <| text "number"
-                }
             , row [ width fill, spacing 16 ]
                 [ Element.Input.button
                     [ Border.width 1
@@ -122,13 +142,10 @@ view model =
                     }
                 , case model.value of
                     Ok value ->
-                        column [ width fill, spacing 16 ]
-                            [ wrappedText [ width fill ] value.text
-                            , text <| String.fromInt value.number
-                            ]
+                        none
 
                     Err error ->
-                        text error
+                        wrappedText [ width fill ] error
                 ]
             ]
 
