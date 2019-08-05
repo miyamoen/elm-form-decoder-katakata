@@ -167,6 +167,7 @@ Validatorを作る専用APIはありませんが、Validatorの定義をみれ�
 -}
 
 import Browser
+import Component.Form as Form
 import Element exposing (..)
 import Element.Background as Background
 import Element.Border as Border
@@ -179,6 +180,11 @@ import Html.Attributes
 import KataKata.Element exposing (..)
 import KataKata.Test as Test exposing (Test)
 import KataKata.Util exposing (..)
+
+
+title : String
+title =
+    "05 Build up Decoder"
 
 
 type alias Model =
@@ -238,6 +244,7 @@ type Error
 
 decoder : Decoder Form Error Value
 decoder =
+    -- この行全体を書き換えましょう
     replace____me3 <| Decoder.always { text = "initial", number = 1 }
 
 
@@ -249,6 +256,7 @@ textDecoder =
 
 numberDecoder : Decoder String Error Int
 numberDecoder =
+    -- この行全体を書き換えましょう
     replace____me2 <| Decoder.always -5
 
 
@@ -259,95 +267,36 @@ view { form, value } =
             Decoder.errors decoder form
     in
     Test.withTest testSuite <|
-        column [ width fill, spacing 32 ]
-            [ viewInput
-                { onChange = ChangeText
-                , value = form.text
-                , label = "text"
-                , validations =
-                    [ { message = "必須です", invalid = List.member TextEmpty errors }
-                    , { message = "10文字以下にしてください", invalid = List.member TextTooLong errors }
+        withTitle title <|
+            column [ width fill, spacing 32 ]
+                [ Form.view []
+                    [ Form.text
+                        { label = "text"
+                        , onChange = ChangeText
+                        , attrs = [ htmlAttribute <| Html.Attributes.autofocus True ]
+                        , form = form.text
+                        , value = value.text
+                        }
+                    , Form.errors
+                        [ ( "必須です", List.member TextEmpty errors )
+                        , ( "10文字以下にしてください", List.member TextTooLong errors )
+                        ]
+                    , Form.text
+                        { label = "number"
+                        , onChange = ChangeNumber
+                        , attrs = []
+                        , form = form.number
+                        , value = String.fromInt value.number
+                        }
+                    , Form.errors
+                        [ ( "整数を入力してください", List.member NumberInvalidInt errors )
+                        , ( "1以上の整数を入力してください", List.member NumberBelow errors )
+                        , ( "10以下の整数を入力してください", List.member NumberOver errors )
+                        ]
                     ]
-                }
-            , viewInput
-                { onChange = ChangeNumber
-                , value = form.number
-                , label = "number"
-                , validations =
-                    [ { message = "整数を入力してください", invalid = List.member NumberInvalidInt errors }
-                    , { message = "1以上の整数を入力してください", invalid = List.member NumberBelow errors }
-                    , { message = "10以下の整数を入力してください", invalid = List.member NumberOver errors }
-                    ]
-                }
-            , row [ width fill, spacing 16 ]
-                [ Element.Input.button
-                    [ alignTop
-                    , Border.width 1
-                    , Border.rounded 4
-                    , Border.color <| rgba255 0 0 0 0.3
-                    , if List.isEmpty errors then
-                        Background.color <| rgb255 255 236 165
-
-                      else
-                        Background.color <| rgb255 243 236 214
-                    ]
-                    { onPress =
-                        if List.isEmpty errors then
-                            Just ConvertForm
-
-                        else
-                            Nothing
-                    , label = el [ padding 8 ] <| text "変換する"
-                    }
-                , viewValue value
+                , Form.button []
+                    { label = "変換する", msg = ConvertForm, enable = List.isEmpty errors }
                 ]
-            ]
-
-
-viewValue : Value -> Element msg
-viewValue { text, number } =
-    column [ width fill, spacing 4 ]
-        [ wrappedText [ width fill ] <| "{ text : " ++ text
-        , wrappedText [ width fill ] <| ", number : " ++ String.fromInt number
-        , Element.text "}"
-        ]
-
-
-viewInput :
-    { onChange : String -> msg
-    , value : String
-    , label : String
-    , validations : List { message : String, invalid : Bool }
-    }
-    -> Element msg
-viewInput { onChange, value, label, validations } =
-    column [ width fill, spacing 8 ]
-        [ Element.Input.text
-            [ width fill
-            , htmlAttribute <| Html.Attributes.autofocus True
-            ]
-            { onChange = onChange
-            , text = value
-            , placeholder = Nothing
-            , label = Element.Input.labelAbove [] <| text label
-            }
-        , row
-            [ width fill
-            , height <| px 20
-            , spacing 32
-            , Font.color <| rgb255 234 122 184
-            ]
-          <|
-            List.map
-                (\{ message, invalid } ->
-                    if invalid then
-                        text message
-
-                    else
-                        none
-                )
-                validations
-        ]
 
 
 main =
@@ -357,7 +306,7 @@ main =
 
 testSuite : Test
 testSuite =
-    Test.describe "05 - Build up Decoder"
+    Test.describe title
         [ Test.test "textDecoderを実装しましょう" <|
             \_ ->
                 let

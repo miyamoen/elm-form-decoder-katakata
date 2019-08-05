@@ -75,15 +75,7 @@ run suite =
 
 view : Test -> Element msg
 view suite =
-    column [ width fill, spacing 32 ]
-        [ row [ width fill, spacing 32 ] [ viewLine <| px 64, text "Test", viewLine fill ]
-        , viewTestResult <| run suite
-        ]
-
-
-viewLine : Length -> Element msg
-viewLine length =
-    el [ width length, Border.width 2, Border.color <| rgba255 0 0 0 0.2 ] none
+    withTitle "Test" (viewTestResult <| run suite)
 
 
 viewTestResult : TestResult -> Element msg

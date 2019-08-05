@@ -37,6 +37,7 @@ textとnumberをまとめてレコード型で扱うことにしました。フ�
 -}
 
 import Browser
+import Component.Form as Form
 import Component.Grid as Grid
 import Element exposing (..)
 import Element.Background as Background
@@ -48,6 +49,11 @@ import Html.Attributes
 import KataKata.Element exposing (..)
 import KataKata.Test as Test exposing (Test)
 import KataKata.Util exposing (replace____me)
+
+
+title : String
+title =
+    "03 Int & Record"
 
 
 type alias Model =
@@ -94,60 +100,46 @@ update msg ({ form } as model) =
 view : Model -> Html Msg
 view model =
     Test.withTest testSuite <|
-        column [ width fill, spacing 16 ]
-            [ Grid.view [ spacingXY 16 8 ]
-                [ shrink, fill, shrink, fill ]
-                [ [ el [ centerY ] <| text "text"
-                  , Element.Input.text
-                        [ htmlAttribute <| Html.Attributes.autofocus True ]
-                        { onChange = ChangeText
-                        , text = model.form.text
-                        , placeholder = Nothing
-                        , label = Element.Input.labelHidden "text"
-                        }
-                  , el [ centerY ] <| text "➡"
-                  , case model.value of
-                        Ok value ->
-                            wrappedText [ centerY ] value.text
+        withTitle title <|
+            column [ width fill, spacing 32 ]
+                [ Form.view []
+                    [ Form.text
+                        { label = "text"
+                        , onChange = ChangeText
+                        , attrs = [ htmlAttribute <| Html.Attributes.autofocus True ]
+                        , form = model.form.text
+                        , value =
+                            case model.value of
+                                Ok value ->
+                                    value.text
 
-                        Err error ->
-                            el [ centerY ] <| text "textの変換に失敗しました"
-                  ]
-                , [ el [ centerY ] <| text "number"
-                  , Element.Input.text []
-                        { onChange = ChangeNumber
-                        , text = model.form.number
-                        , placeholder = Nothing
-                        , label = Element.Input.labelHidden "number"
+                                Err error ->
+                                    "textの変換に失敗しました"
                         }
-                  , el [ centerY ] <| text "➡"
-                  , case model.value of
-                        Ok value ->
-                            wrappedText [ centerY ] <| String.fromInt value.number
+                    , Form.text
+                        { label = "number"
+                        , onChange = ChangeNumber
+                        , attrs = []
+                        , form = model.form.number
+                        , value =
+                            case model.value of
+                                Ok value ->
+                                    String.fromInt value.number
 
-                        Err error ->
-                            el [ centerY ] <| text "numberの変換に失敗しました"
-                  ]
-                ]
-            , row [ width fill, spacing 16 ]
-                [ Element.Input.button
-                    [ Border.width 1
-                    , Border.rounded 4
-                    , Border.color <| rgba255 0 0 0 0.3
-                    , Background.color <| rgb255 255 236 165
-                    , alignTop
+                                Err error ->
+                                    "numberの変換に失敗しました"
+                        }
                     ]
-                    { onPress = Just ConvertForm
-                    , label = el [ padding 8 ] <| text "変換する"
-                    }
-                , case model.value of
-                    Ok value ->
-                        none
+                , row [ width fill, spacing 16 ]
+                    [ Form.button [] { label = "変換する", msg = ConvertForm, enable = True }
+                    , case model.value of
+                        Ok value ->
+                            none
 
-                    Err error ->
-                        wrappedText [ width fill ] error
+                        Err error ->
+                            wrappedText [ width fill ] error
+                    ]
                 ]
-            ]
 
 
 main =
@@ -157,7 +149,7 @@ main =
 
 testSuite : Test
 testSuite =
-    Test.describe "03 - Int & Record"
+    Test.describe title
         [ Test.test "valueはformから変換されます" <|
             \_ ->
                 let

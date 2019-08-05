@@ -67,6 +67,7 @@ assertを使ってDecoderに適用します。Decoderで変換したあと、そ
 -}
 
 import Browser
+import Component.Form as Form
 import Element exposing (..)
 import Element.Background as Background
 import Element.Border as Border
@@ -79,6 +80,11 @@ import Html.Attributes
 import KataKata.Element exposing (..)
 import KataKata.Test as Test exposing (Test)
 import KataKata.Util exposing (..)
+
+
+title : String
+title =
+    "04 Hello, Form Decoder"
 
 
 type alias Model =
@@ -102,7 +108,7 @@ update msg model =
             { model | formText = string }
 
         ConvertText ->
-            -- `replace____me1 model.value`全体を書き換えてください
+            -- `replace____me1 model.value`を書き換えましょう
             replace____me1 model
 
 
@@ -113,8 +119,8 @@ type Error
 
 decoder : Decoder String Error String
 decoder =
-    -- `replace____me2 <| Decoder.always "虎にならない"`全体を書き換えてください
-    replace____me2 <| Decoder.always "虎にならない"
+    -- `replace____me2 <| Decoder.always "虎にならない"`を書き換えましょう
+    replace____me2 <| Decoder.fail TextEmpty
 
 
 view : Model -> Html Msg
@@ -124,52 +130,24 @@ view model =
             Decoder.errors decoder model.formText
     in
     Test.withTest testSuite <|
-        column [ width fill, spacing 32 ]
-            [ column [ width fill, spacing 8 ]
-                [ Element.Input.text
-                    [ width fill
-                    , htmlAttribute <| Html.Attributes.autofocus True
+        withTitle title <|
+            column [ width fill, spacing 32 ]
+                [ Form.view []
+                    [ Form.text
+                        { label = "text"
+                        , onChange = ChangeText
+                        , attrs = [ htmlAttribute <| Html.Attributes.autofocus True ]
+                        , form = model.formText
+                        , value = model.formText
+                        }
+                    , Form.errors
+                        [ ( "必須です", List.member TextEmpty errors )
+                        , ( "10文字以下にしてください", List.member TextTooLong errors )
+                        ]
                     ]
-                    { onChange = ChangeText
-                    , text = model.formText
-                    , placeholder = Nothing
-                    , label = Element.Input.labelAbove [] <| text "text"
-                    }
-                , row [ width fill, height <| px 20, spacing 32, Font.color <| rgb255 234 122 184 ]
-                    [ if List.member TextEmpty errors then
-                        text "必須です"
-
-                      else
-                        none
-                    , if List.member TextTooLong errors then
-                        text "10文字以下にしてください"
-
-                      else
-                        none
-                    ]
+                , Form.button []
+                    { label = "変換する", msg = ConvertText, enable = List.isEmpty errors }
                 ]
-            , row [ width fill, spacing 16 ]
-                [ Element.Input.button
-                    [ Border.width 1
-                    , Border.rounded 4
-                    , Border.color <| rgba255 0 0 0 0.3
-                    , if List.isEmpty errors then
-                        Background.color <| rgb255 255 236 165
-
-                      else
-                        Background.color <| rgb255 243 236 214
-                    ]
-                    { onPress =
-                        if List.isEmpty errors then
-                            Just ConvertText
-
-                        else
-                            Nothing
-                    , label = el [ padding 8 ] <| text "変換する"
-                    }
-                , wrappedText [ width fill ] <| "text : " ++ model.text
-                ]
-            ]
 
 
 main =
@@ -179,7 +157,7 @@ main =
 
 testSuite : Test
 testSuite =
-    Test.describe "04 - Hello, Form Decoder"
+    Test.describe title
         [ Test.test "textはformTextから変換されます" <|
             \_ ->
                 let

@@ -25,6 +25,7 @@ Modelの定義と変換するMsgも作りましたが、何か忘れています
 -}
 
 import Browser
+import Component.Form as Form
 import Element exposing (..)
 import Element.Background as Background
 import Element.Border as Border
@@ -35,6 +36,11 @@ import Html.Attributes
 import KataKata.Element exposing (..)
 import KataKata.Test as Test exposing (Test)
 import KataKata.Util exposing (replace____me)
+
+
+title : String
+title =
+    "02 Separate Model"
 
 
 type alias Model =
@@ -59,7 +65,7 @@ update msg model =
 
         ConvertText ->
             { model
-              -- `replace____me model.text`全体を書き換えてください
+              -- `replace____me model.text`を書き換えましょう
                 | text = replace____me model.text
             }
 
@@ -67,34 +73,30 @@ update msg model =
 view : Model -> Html Msg
 view model =
     Test.withTest testSuite <|
-        column [ width fill, spacing 16 ]
-            [ Element.Input.text
-                [ width fill
-                , htmlAttribute <| Html.Attributes.autofocus True
-                ]
-                { onChange = ChangeText
-                , text = model.formText
-                , placeholder = Nothing
-                , label = Element.Input.labelHidden "text"
-                }
-            , row [ width fill, spacing 16 ]
-                [ Element.Input.button
-                    [ Border.width 1
-                    , Border.rounded 4
-                    , Border.color <| rgba255 0 0 0 0.3
-                    , Background.color <| rgb255 255 236 165
-                    ]
-                    { onPress = Just ConvertText
-                    , label = el [ padding 8 ] <| text "変換する"
-                    }
-                , case model.text of
-                    Just string ->
-                        wrappedText [ width fill ] string
+        withTitle title <|
+            column [ width fill, spacing 32 ]
+                [ row [ width fill, spacing 16 ]
+                    [ el [ centerY ] <| text "text"
+                    , Element.Input.text
+                        [ width fill
+                        , htmlAttribute <| Html.Attributes.autofocus True
+                        ]
+                        { onChange = ChangeText
+                        , text = model.formText
+                        , placeholder = Nothing
+                        , label = Element.Input.labelHidden "text"
+                        }
+                    , el [ centerY ] <| Element.text "➡"
+                    , wrappedText [ width fill, centerY, paddingXY 12 0 ] <|
+                        case model.text of
+                            Just string ->
+                                string
 
-                    Nothing ->
-                        text "入力欄が10文字より長いです"
+                            Nothing ->
+                                "入力欄が10文字より長いです"
+                    ]
+                , Form.button [] { label = "変換する", msg = ConvertText, enable = True }
                 ]
-            ]
 
 
 main =
@@ -104,7 +106,7 @@ main =
 
 testSuite : Test
 testSuite =
-    Test.describe "02 - SeparateModel"
+    Test.describe title
         [ Test.test "textはformTextから変換されます" <|
             \_ ->
                 let

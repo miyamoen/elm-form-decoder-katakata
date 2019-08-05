@@ -35,6 +35,11 @@ import KataKata.Test as Test exposing (Test)
 import KataKata.Util exposing (replace____me)
 
 
+title : String
+title =
+    "01 Same Model"
+
+
 {-| textが今回欲しい10文字以下の文字列です
 -}
 type alias Model =
@@ -56,25 +61,26 @@ update : Msg -> Model -> Model
 update msg model =
     case msg of
         ChangeText string ->
-            -- 何か実装し忘れているような
+            -- 何か実装し忘れているような。`replace____me string`を書き換えましょう
             { model | text = replace____me string }
 
 
 view : Model -> Html Msg
 view model =
     Test.withTest testSuite <|
-        column [ width fill, spacing 16 ]
-            [ Element.Input.text
-                [ width fill
-                , htmlAttribute <| Html.Attributes.autofocus True
+        withTitle title <|
+            column [ width fill, spacing 32 ]
+                [ Element.Input.text
+                    [ width fill
+                    , htmlAttribute <| Html.Attributes.autofocus True
+                    ]
+                    { onChange = ChangeText
+                    , text = model.text
+                    , placeholder = Nothing
+                    , label = Element.Input.labelHidden "text"
+                    }
+                , wrappedText [ width fill, paddingXY 12 0 ] model.text
                 ]
-                { onChange = ChangeText
-                , text = model.text
-                , placeholder = Nothing
-                , label = Element.Input.labelHidden "text"
-                }
-            , wrappedText [ width fill ] model.text
-            ]
 
 
 main =
@@ -84,7 +90,7 @@ main =
 
 testSuite : Test
 testSuite =
-    Test.describe "01 - SameModel"
+    Test.describe title
         [ Test.test "textは10文字以下の文字列です" <|
             \_ ->
                 init
