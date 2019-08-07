@@ -2,7 +2,20 @@
 
 [elm-form-decoder](https://package.elm-lang.org/packages/arowM/elm-form-decoder/latest/)の勉強用のkataです
 
-> WIPです
+## お品書き
+
+- 01 Hello, Form
+  - はじめてフォームを作ってみる
+- 02 Separate Model
+  - ModelをFormとValueに分けてみる
+- 03 Int & Record
+  - 数字を入力してみる
+  - レコード型を使ってまとめる
+- 04 Hello, Form Decoder
+  - elm-form-decoderを使ってみる
+- 05 Build up Decoder
+  - elm-form-decoderでレコード型を使ってみる
+- WIP
 
 ## How to Learn
 
@@ -12,7 +25,7 @@ cd elm-form-decoder-katakata
 elm reactor
 ```
 
-`src/KataKata01SameModel.elm`を開いて始めてください
+`src/KataKata01HelloForm.elm`を開いて始めてください
 
 ![](sample.png)
 
@@ -26,3 +39,6 @@ elm reactor
 - 進捗をtwitter等で報告する(__TODO__ シェアボタン)
 
 
+## 回答例
+
+まだないです

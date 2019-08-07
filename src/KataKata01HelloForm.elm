@@ -1,9 +1,9 @@
-module KataKata01SameModel exposing (Model, Msg(..), init, main, update, view)
+module KataKata01HelloForm exposing (Model, Msg(..), init, main, update, view)
 
 {-|
 
 
-# katakata 01 Same Model
+# katakata 01 Hello, Model
 
 最初のkataです。まず一番簡単なフォームから始めてみましょう
 
@@ -37,7 +37,7 @@ import KataKata.Util exposing (replace____me)
 
 title : String
 title =
-    "01 Same Model"
+    "01 Hello, Model"
 
 
 {-| textが今回欲しい10文字以下の文字列です
@@ -98,5 +98,5 @@ testSuite =
                     |> .text
                     |> String.length
                     |> Expect.atMost 10
-                    |> Expect.onFail "textが常に10文字以下になるように`KataKata01SameModel.elm`の`replace____me`を書き換えましょう"
+                    |> Expect.onFail "textが常に10文字以下になるように`KataKata01HelloForm.elm`の`replace____me`を書き換えましょう"
         ]
