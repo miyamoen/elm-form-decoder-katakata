@@ -95,21 +95,38 @@ viewSingle : String -> Maybe Failure -> Element msg
 viewSingle label maybe =
     case maybe of
         Nothing ->
-            row [ spacing 8 ] [ text "✅", text label ]
+            row [ width fill, spacing 8, Font.bold ] [ text "✅", text label ]
 
         Just { description, reason } ->
-            row [ spacing 8, width fill ]
+            row [ spacing 8, width fill, Font.bold ]
                 [ el [ alignTop ] <| text "🆖"
                 , column [ width fill, spacing 16 ]
                     [ text label
-                    , text <| Test.Runner.Failure.format description reason
+                    , textColumn
+                        [ width fill
+                        , Font.size 16
+                        , Font.regular
+                        , spacing 4
+                        , paddingEach
+                            { top = 0, right = 0, bottom = 0, left = 16 }
+                        ]
+                      <|
+                        List.map (wrappedText [ width fill ]) <|
+                            String.lines <|
+                                Test.Runner.Failure.format description reason
                     ]
                 ]
 
 
 viewBatch : String -> List TestResult -> Element msg
 viewBatch label results =
-    column [ spacing 32 ]
+    column [ width fill, spacing 32 ]
         [ text label
-        , column [ paddingXY 32 0, spacing 32 ] <| List.map viewTestResult results
+        , column
+            [ width fill
+            , paddingEach { top = 0, right = 0, bottom = 0, left = 32 }
+            , spacing 32
+            ]
+          <|
+            List.map viewTestResult results
         ]

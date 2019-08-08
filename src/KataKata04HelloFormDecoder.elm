@@ -171,9 +171,8 @@ testSuite =
                     |> .text
                     |> Expect.equal text
                     |> Expect.onFail """textがformTextから変換されるように`replace____me*`を書き換えましょう
-
-replace____me1はDecoder.runとdecoderを使ってformTextを変換しましょう
-replace____me2はDecoder.identityで`Decoder String err Strig`を作りましょう"""
+・replace____me1はDecoder.runとdecoderを使ってformTextを変換しましょう
+・replace____me2はDecoder.identityで`Decoder String err Strig`を作りましょう"""
         , Test.test "formTextが空文字のとき、変換は失敗します" <|
             \_ ->
                 let
