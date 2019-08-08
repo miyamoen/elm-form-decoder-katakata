@@ -42,6 +42,7 @@ import Component.Grid as Grid
 import Element exposing (..)
 import Element.Background as Background
 import Element.Border as Border
+import Element.Font as Font
 import Element.Input
 import Expect
 import Html exposing (Html)
@@ -92,8 +93,8 @@ update msg ({ form } as model) =
 
         ConvertForm ->
             { model
-              -- `replace____me model.value`全体を書き換えてください
-                | value = Err "エラーだよ"
+              -- `replace____me model.value`を書き換えましょう
+                | value = replace____me model.value
             }
 
 
@@ -101,44 +102,50 @@ view : Model -> Html Msg
 view model =
     Test.withTest testSuite <|
         withTitle title <|
-            column [ width fill, spacing 32 ]
-                [ Form.view []
-                    [ Form.text
-                        { label = "text"
-                        , onChange = ChangeText
-                        , attrs = [ htmlAttribute <| Html.Attributes.autofocus True ]
-                        , form = model.form.text
-                        , value =
-                            case model.value of
-                                Ok value ->
-                                    value.text
+            Form.view []
+                [ Form.text
+                    { label = "text"
+                    , onChange = ChangeText
+                    , attrs = [ htmlAttribute <| Html.Attributes.autofocus True ]
+                    , form = model.form.text
+                    , value =
+                        case model.value of
+                            Ok value ->
+                                value.text
 
-                                Err error ->
-                                    "textの変換に失敗しました"
-                        }
-                    , Form.text
-                        { label = "number"
-                        , onChange = ChangeNumber
-                        , attrs = []
-                        , form = model.form.number
-                        , value =
-                            case model.value of
-                                Ok value ->
-                                    String.fromInt value.number
+                            Err _ ->
+                                ""
+                    }
+                , Form.text
+                    { label = "number"
+                    , onChange = ChangeNumber
+                    , attrs = []
+                    , form = model.form.number
+                    , value =
+                        case model.value of
+                            Ok value ->
+                                String.fromInt value.number
 
-                                Err error ->
-                                    "numberの変換に失敗しました"
-                        }
-                    ]
-                , row [ width fill, spacing 16 ]
-                    [ Form.button [] { label = "変換する", msg = ConvertForm, enable = True }
-                    , case model.value of
+                            Err _ ->
+                                ""
+                    }
+                , [ none
+                  , el [] <|
+                        Form.button_ [ alignRight ]
+                            { label = "変換する", msg = ConvertForm, enable = True }
+                  , none
+                  , case model.value of
                         Ok value ->
                             none
 
                         Err error ->
-                            wrappedText [ width fill ] error
-                    ]
+                            wrappedText
+                                [ Font.color <| rgb255 234 122 184
+                                , paddingXY 12 0
+                                , centerY
+                                ]
+                                error
+                  ]
                 ]
 
 

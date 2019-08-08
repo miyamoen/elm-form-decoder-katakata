@@ -95,7 +95,7 @@ view model =
                             Nothing ->
                                 "入力欄が10文字より長いです"
                     ]
-                , Form.button [] { label = "変換する", msg = ConvertText, enable = True }
+                , Form.button_ [] { label = "変換する", msg = ConvertText, enable = True }
                 ]
 
 

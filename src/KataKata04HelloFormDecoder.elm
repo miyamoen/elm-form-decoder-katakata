@@ -131,22 +131,23 @@ view model =
     in
     Test.withTest testSuite <|
         withTitle title <|
-            column [ width fill, spacing 32 ]
-                [ Form.view []
-                    [ Form.text
-                        { label = "text"
-                        , onChange = ChangeText
-                        , attrs = [ htmlAttribute <| Html.Attributes.autofocus True ]
-                        , form = model.formText
-                        , value = model.formText
-                        }
-                    , Form.errors
-                        [ ( "必須です", List.member TextEmpty errors )
-                        , ( "10文字以下にしてください", List.member TextTooLong errors )
-                        ]
+            Form.view []
+                [ Form.text
+                    { label = "text"
+                    , onChange = ChangeText
+                    , attrs = [ htmlAttribute <| Html.Attributes.autofocus True ]
+                    , form = model.formText
+                    , value = model.formText
+                    }
+                , Form.errors
+                    [ ( "必須です", List.member TextEmpty errors )
+                    , ( "10文字以下にしてください", List.member TextTooLong errors )
                     ]
-                , Form.button []
-                    { label = "変換する", msg = ConvertText, enable = List.isEmpty errors }
+                , Form.button
+                    { label = "変換する"
+                    , msg = ConvertText
+                    , enable = List.isEmpty errors
+                    }
                 ]
 
 

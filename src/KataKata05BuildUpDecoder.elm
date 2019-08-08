@@ -268,34 +268,35 @@ view { form, value } =
     in
     Test.withTest testSuite <|
         withTitle title <|
-            column [ width fill, spacing 32 ]
-                [ Form.view []
-                    [ Form.text
-                        { label = "text"
-                        , onChange = ChangeText
-                        , attrs = [ htmlAttribute <| Html.Attributes.autofocus True ]
-                        , form = form.text
-                        , value = value.text
-                        }
-                    , Form.errors
-                        [ ( "必須です", List.member TextEmpty errors )
-                        , ( "10文字以下にしてください", List.member TextTooLong errors )
-                        ]
-                    , Form.text
-                        { label = "number"
-                        , onChange = ChangeNumber
-                        , attrs = []
-                        , form = form.number
-                        , value = String.fromInt value.number
-                        }
-                    , Form.errors
-                        [ ( "整数を入力してください", List.member NumberInvalidInt errors )
-                        , ( "1以上の整数を入力してください", List.member NumberBelow errors )
-                        , ( "10以下の整数を入力してください", List.member NumberOver errors )
-                        ]
+            Form.view []
+                [ Form.text
+                    { label = "text"
+                    , onChange = ChangeText
+                    , attrs = [ htmlAttribute <| Html.Attributes.autofocus True ]
+                    , form = form.text
+                    , value = value.text
+                    }
+                , Form.errors
+                    [ ( "必須です", List.member TextEmpty errors )
+                    , ( "10文字以下にしてください", List.member TextTooLong errors )
                     ]
-                , Form.button []
-                    { label = "変換する", msg = ConvertForm, enable = List.isEmpty errors }
+                , Form.text
+                    { label = "number"
+                    , onChange = ChangeNumber
+                    , attrs = []
+                    , form = form.number
+                    , value = String.fromInt value.number
+                    }
+                , Form.errors
+                    [ ( "整数を入力してください", List.member NumberInvalidInt errors )
+                    , ( "1以上の整数を入力してください", List.member NumberBelow errors )
+                    , ( "10以下の整数を入力してください", List.member NumberOver errors )
+                    ]
+                , Form.button
+                    { label = "変換する"
+                    , msg = ConvertForm
+                    , enable = List.isEmpty errors
+                    }
                 ]
 
 

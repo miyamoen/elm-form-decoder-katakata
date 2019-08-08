@@ -1,4 +1,4 @@
-module Component.Form exposing (button, errors, text, view)
+module Component.Form exposing (button, button_, errors, text, view)
 
 import Component.Grid as Grid
 import Element exposing (..)
@@ -71,8 +71,17 @@ errors messages =
     ]
 
 
-button : List (Attribute msg) -> { label : String, msg : msg, enable : Bool } -> Element msg
-button attrs { msg, enable, label } =
+button : { label : String, msg : msg, enable : Bool } -> List (Element msg)
+button option =
+    [ none
+    , el [] <| button_ [ alignRight ] option
+    , none
+    , none
+    ]
+
+
+button_ : List (Attribute msg) -> { label : String, msg : msg, enable : Bool } -> Element msg
+button_ attrs { msg, enable, label } =
     Element.Input.button
         ([ Border.width 1
          , Border.rounded 4
