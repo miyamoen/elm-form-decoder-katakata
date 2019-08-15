@@ -1,4 +1,4 @@
-module KataKata06OptionalOrRequired exposing (Model, Msg(..), init, main, update, view)
+module KataKata06OptionalOrRequired exposing (title)
 
 {-|
 
@@ -24,6 +24,8 @@ Decoderを作ってみて自信を付けたあなたは、次にkatakata 03のte
   - 画面下部に表示されるテスト結果を読んで`replace____me*`を書き換えましょう
   - 🎉🎉テストが全部通ったらクリアです！🎉🎉
   - katakata 03と比べてみましょう
+
+@docs title
 
 
 ## 学ぶ
@@ -52,13 +54,19 @@ import KataKata.Test as Test exposing (Test)
 import KataKata.Util exposing (..)
 
 
+{-| -}
+title : String
+title =
+    "06 "
+
+
 type alias Model =
     { value : Value, form : Form }
 
 
 type alias Tiger =
     { name : String
-    , age : Int
+    , reason : String
     , species : Maybe String
     }
 

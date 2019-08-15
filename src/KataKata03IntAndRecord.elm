@@ -1,14 +1,9 @@
-module KataKata03IntAndRecord exposing (Model, Msg(..), init, main, update, view)
+module KataKata03IntAndRecord exposing (title)
 
-{-|
-
-
-# katakata 03 Int & Record
-
-Int型と合わせてRecord型にしよう。
+{-| Int型と合わせてRecord型にしよう。
 
 
-## ストーリー
+# ストーリー
 
 あなたは10文字以下の文字列のほかに新たに1以上10以下の整数も必要になりました。個人的にスライダーUIは使いにくいしコピペで入力できないのでテキスト入力で入力することにしました。
 textとnumberをまとめてレコード型で扱うことにしました。フォーム用のレコードと変換した後のレコードの2つをModelに入れました。フォームからの変換はいろいろな理由で失敗しそうなので`Result String Value`にしました。
@@ -17,22 +12,24 @@ textとnumberをまとめてレコード型で扱うことにしました。フ�
 また肝心の変換を実装し忘れています。テストで確認しましょう！
 
 
-## やり方
+# やり方
 
   - elm reactorでこのファイルを開きましょう
   - 画面下部に表示されるテスト結果を読んで`replace____me*`を書き換えましょう
   - 🎉🎉テストが全部通ったらクリアです！🎉🎉
 
 
-## 追加課題
+# 追加課題
 
 文字列の長さはnumber以下にすることにしました。つまり、numberは1以上10以下の整数でtextはnumber文字以下の空文字ではない文字列です。
 
 
-### やり方
+## やり方
 
   - 一番下の"form.textがnumber文字より長いとき、変換は失敗します"のテストについている`skip <|`を外して有効化しましょう
   - 🎉🎉テストが全部通ったらクリアです！🎉🎉
+
+@docs title
 
 -}
 
@@ -52,6 +49,7 @@ import KataKata.Test as Test exposing (Test)
 import KataKata.Util exposing (replace____me)
 
 
+{-| -}
 title : String
 title =
     "03 Int & Record"

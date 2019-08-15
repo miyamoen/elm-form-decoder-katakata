@@ -1,14 +1,9 @@
-module KataKata01HelloForm exposing (Model, Msg(..), init, main, update, view)
+module KataKata01HelloForm exposing (title)
 
-{-|
-
-
-# katakata 01 Hello, Model
-
-最初のkataです。まず一番簡単なフォームから始めてみましょう
+{-| 最初のkataです。まず一番簡単なフォームから始めてみましょう
 
 
-## ストーリー
+# ストーリー
 
 あなたは10文字以下の文字列が必要になりました。そこで`Model`に`text`という名前で保持することにしました。このtextは取り急ぎ画面上に表示しておこうと思います。
 textは変更できるようにしたいと思います。そこでテキスト入力フォームも実装することにしました
@@ -16,11 +11,13 @@ textは変更できるようにしたいと思います。そこでテキスト�
 表示の部分とtextが更新される部分を作りましたが、何か忘れています。テストで確認しましょう！
 
 
-## やり方
+# やり方
 
   - elm reactorでこのファイルを開きましょう
   - 画面下部に表示されるテスト結果を読んで`replace____me*`を書き換えましょう
   - 🎉🎉テストが全部通ったらクリアです！🎉🎉
+
+@docs title
 
 -}
 
@@ -35,6 +32,7 @@ import KataKata.Test as Test exposing (Test)
 import KataKata.Util exposing (replace____me)
 
 
+{-| -}
 title : String
 title =
     "01 Hello, Model"

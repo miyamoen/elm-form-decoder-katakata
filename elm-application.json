@@ -1,0 +1,12 @@
+{
+  "name": "miyamoen/elm-form-decoder-katakata",
+  "summary": "Kata for arowM/elm-form-decoder",
+  "version": "1.0.0",
+  "exposed-modules": [
+    "KataKata01HelloForm",
+    "KataKata02SeparateModel",
+    "KataKata03IntAndRecord",
+    "KataKata04HelloFormDecoder",
+    "KataKata05BuildUpDecoder"
+  ]
+}

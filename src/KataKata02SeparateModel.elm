@@ -1,14 +1,9 @@
-module KataKata02SeparateModel exposing (Model, Msg(..), init, main, update, view)
+module KataKata02SeparateModel exposing (title)
 
-{-|
-
-
-# katakata 02 Separate Model
-
-欲しいModelとフォームの値を分けてみましょう。
+{-| 欲しいModelとフォームの値を分けてみましょう。
 
 
-## ストーリー
+# ストーリー
 
 あなたは前回のフォームで10文字以上入力できなくなっているのがおかしいと感じ始めました。初めて触ったひとには動かなくなって壊れたのかと思われてしまいそうです。それに勝手に文字列を切り取ってしまうのはよくないでしょう。
 そこで、入力欄のModelはtextとは別のものにして、都度変換することにしました。変換は失敗するかもしれないのでtextをMaybeにしました。
@@ -16,11 +11,13 @@ module KataKata02SeparateModel exposing (Model, Msg(..), init, main, update, vie
 Modelの定義と変換するMsgも作りましたが、何か忘れています。テストで確認しましょう！
 
 
-## やり方
+# やり方
 
   - elm reactorでこのファイルを開きましょう
   - 画面下部に表示されるテスト結果を読んで`replace____me*`を書き換えましょう
   - 🎉🎉テストが全部通ったらクリアです！🎉🎉
+
+@docs title
 
 -}
 
@@ -38,6 +35,7 @@ import KataKata.Test as Test exposing (Test)
 import KataKata.Util exposing (replace____me)
 
 
+{-| -}
 title : String
 title =
     "02 Separate Model"

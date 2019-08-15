@@ -1,14 +1,9 @@
-module KataKata04HelloFormDecoder exposing (Model, Msg(..), init, main, update, view)
+module KataKata04HelloFormDecoder exposing (title)
 
-{-|
-
-
-# katakata 04 Hello, Form Decoder
-
-arowM/elm-form-decoderを使ってみましょう
+{-| arowM/elm-form-decoderを使ってみましょう
 
 
-## ストーリー
+# ストーリー
 
 あなたはcase式とif式のネストに嫌気がさしてきました。数値への変換と各種条件をごちゃごちゃ書くのは絡まってしまってよくない兆候です。
 そんなとき[arowM/elm-form-decoder](https://package.elm-lang.org/packages/arowM/elm-form-decoder/latest/)というライブラリがいいと聞き使ってみることにしました。
@@ -16,17 +11,19 @@ arowM/elm-form-decoderを使ってみましょう
 初めてなので簡単なところから始めてみることにしました。空文字ではない10文字以下の文字列をform decoderで変換してみましょう。
 
 
-## やり方
+# やり方
 
   - elm reactorでこのファイルを開きましょう
   - 画面下部に表示されるテスト結果を読んで`replace____me*`を書き換えましょう
   - 🎉🎉テストが全部通ったらクリアです！🎉🎉
 
+@docs title
 
-## 学ぶ
+
+# 学ぶ
 
 
-### 記事で学ぶ
+## 記事で学ぶ
 
 紹介記事は軽く目を通してください
 
@@ -35,7 +32,7 @@ arowM/elm-form-decoderを使ってみましょう
   - API詳解[「arowM/elm-form-decoderのAPIを【かんぜんりかい】しよう！」](https://qiita.com/miyamo_madoka/items/d02f003ec1c212360111)
 
 
-### 今回学ぶこと
+## 今回学ぶこと
 
   - Decoderの実行方法
       - `Decoder.run decoder input`で定義したdecoderで変換できる
@@ -46,14 +43,14 @@ arowM/elm-form-decoderを使ってみましょう
       - 長さに関するValidatorは`minLength`と`maxLength`
 
 
-#### `Decoder i err a`
+### `Decoder i err a`
 
 `i`から`a`への変換。変換に失敗すると`List err`になる。
 
 実体は`i -> Result (List err) a`です。
 
 
-#### `Validator i err`
+### `Validator i err`
 
 変換をせずにバリデーションのみをする型です。
 
@@ -82,6 +79,7 @@ import KataKata.Test as Test exposing (Test)
 import KataKata.Util exposing (..)
 
 
+{-| -}
 title : String
 title =
     "04 Hello, Form Decoder"

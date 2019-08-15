@@ -1,14 +1,9 @@
-module KataKata05BuildUpDecoder exposing (Model, Msg(..), init, main, update, view)
+module KataKata05BuildUpDecoder exposing (title)
 
-{-|
-
-
-# katakata 05 Build up Decoder
-
-Decoderを組み合わせて使ってみましょう
+{-| Decoderを組み合わせて使ってみましょう
 
 
-## ストーリー
+# ストーリー
 
 Decoderを作ってみて自信を付けたあなたは、次にkatakata 03のtextとnumberのレコードのフォームをelm-form-decoderで作ってみることにしました。
 
@@ -18,25 +13,27 @@ Decoderを作ってみて自信を付けたあなたは、次にkatakata 03のte
   - 数字は1以上10以下の整数
 
 
-## やり方
+# やり方
 
   - elm reactorでこのファイルを開きましょう
   - 画面下部に表示されるテスト結果を読んで`replace____me*`を書き換えましょう
   - 🎉🎉テストが全部通ったらクリアです！🎉🎉
   - katakata 03と比べてみましょう
 
+@docs title
 
-## 学ぶ
+
+# 学ぶ
 
 
-### 記事で学ぶ
+## 記事で学ぶ
 
   - [package document](https://package.elm-lang.org/packages/arowM/elm-form-decoder/latest/)
   - 作者の書いた紹介記事[「フォームバリデーションからフォームデコーディングの時代へ」](https://qiita.com/arowM/items/6c32db1f9e4b92445f3b)
   - API詳解[「arowM/elm-form-decoderのAPIを【かんぜんりかい】しよう！」](https://qiita.com/miyamo_madoka/items/d02f003ec1c212360111)
 
 
-### 今回学ぶこと
+## 今回学ぶこと
 
   - Int型のDecoder
       - Decoder.intで`Decoder String err Int`が作れる
@@ -47,7 +44,7 @@ Decoderを作ってみて自信を付けたあなたは、次にkatakata 03のte
       - liftを使って入力の型を合わせる方法
 
 
-#### `lift`する
+### `lift`する
 
 まずこういう虎型と虎フォーム型がある
 
@@ -97,7 +94,7 @@ TigerFormからnameは`.name`で簡単に取れるのでこの変換は簡単に
 このようにレコードのDecoderを作るときはほぼ必ず`lift`することになるので使ってみましょう。
 
 
-#### Decoderを組み合わせる
+### Decoderを組み合わせる
 
 題材はそのまま虎を使う。
 
@@ -116,23 +113,23 @@ TigerFormからnameは`.name`で簡単に取れるのでこの変換は簡単に
 合成するときは各Decoderの入力の型を合わせなければならない。そのために前項で学んだ`lift`を使う。`top Constructor |> field (lift .accessor subDecoder)`をとりあえず覚えてしまってもいい。
 
 
-## 追加課題
+# 追加課題
 
 文字列の長さはnumber以下にすることにしました。つまり、numberは1以上10以下の整数でtextはnumber文字以下の空文字ではない文字列です。
 
 
-### やり方
+## やり方
 
   - 一番下の"form.textがnumber文字より長いとき、変換は失敗します"のテストについている`skip <|`を外して有効化しましょう
   - 🎉🎉テストが全部通ったらクリアです！🎉🎉
 
 
-### 学ぶ
+## 学ぶ
 
 実装方法はいくつかあると思うが、ここでは組み合わせた後にバリデーションすることにする。（もちろん自分で考えたやり方でやってもらっていい）
 
 
-#### 考え方
+### 考え方
 
 回答作ったときの考え方を書いておきますがあんまり役に立たなさそうです。
 
@@ -141,7 +138,7 @@ numberに依存してDecoderを作らないといけないので、値に依存�
 ということでdecoderにtextがnumber文字以下のバリデーションを足してみましょう。
 
 
-#### カスタムバリデーターを作る
+### カスタムバリデーターを作る
 
 packageに用意されているValidator（minBound, minLength,...）はあくまでよく使うだろうから用意されているだけであって、自分で作ってはいけないだなんて固定観念を今すぐ捨て去るべきです。作りましょう。
 
@@ -182,6 +179,7 @@ import KataKata.Test as Test exposing (Test)
 import KataKata.Util exposing (..)
 
 
+{-| -}
 title : String
 title =
     "05 Build up Decoder"
